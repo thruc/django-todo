@@ -70,7 +70,9 @@ def imap_producer(
                     try:
                         yield message
                     except Exception:
-                        logger.exception(f"something went wrong while processing {message_uid}")
+                        logger.exception(
+                            f"something went wrong while processing {message_uid}"
+                        )
                         raise
 
                     if not preserve:

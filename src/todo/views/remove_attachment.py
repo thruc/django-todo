@@ -31,7 +31,8 @@ def remove_attachment(request, attachment_id: int) -> HttpResponse:
             messages.success(request, f"Attachment {attachment.id} removed.")
         else:
             messages.error(
-                request, f"Sorry, there was a problem deleting attachment {attachment.id}."
+                request,
+                f"Sorry, there was a problem deleting attachment {attachment.id}.",
             )
 
         return redirect(redir_url)

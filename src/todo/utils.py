@@ -16,8 +16,8 @@ log = logging.getLogger(__name__)
 
 def staff_check(user):
     """If TODO_STAFF_ONLY is set to True, limit view access to staff users only.
-        # FIXME: More granular access control needed - see
-        https://github.com/shacker/django-todo/issues/50
+    # FIXME: More granular access control needed - see
+    https://github.com/shacker/django-todo/issues/50
     """
 
     if defaults("TODO_STAFF_ONLY"):
@@ -62,7 +62,9 @@ def todo_send_mail(user, task, subject, body, recip_list):
     references = " ".join(filter(bool, references))
 
     from_address, backend = todo_get_mailer(user, task)
-    message_hash = hash((subject, body, from_address, frozenset(recip_list), references))
+    message_hash = hash(
+        (subject, body, from_address, frozenset(recip_list), references)
+    )
 
     message_id = (
         # the task_id enables attaching back notification answers

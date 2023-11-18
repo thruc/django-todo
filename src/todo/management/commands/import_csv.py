@@ -14,9 +14,12 @@ class Command(BaseCommand):
     """
 
     def add_arguments(self, parser: CommandParser) -> None:
-
         parser.add_argument(
-            "-f", "--file", dest="file", default=None, help="File to to inbound CSV file."
+            "-f",
+            "--file",
+            dest="file",
+            default=None,
+            help="File to to inbound CSV file.",
         )
 
     def handle(self, *args: Any, **options: Any) -> None:

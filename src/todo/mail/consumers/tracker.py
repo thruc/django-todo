@@ -61,7 +61,9 @@ def parse_references(task_list, references):
             continue
 
         thread_id = int(match.group(1))
-        new_answer_thread = Task.objects.filter(task_list=task_list, pk=thread_id).first()
+        new_answer_thread = Task.objects.filter(
+            task_list=task_list, pk=thread_id
+        ).first()
         if new_answer_thread is not None:
             answer_thread = new_answer_thread
 
@@ -107,13 +109,17 @@ def insert_message(task_list, message, priority, task_title_format):
     message_from = message["from"]
     text = message_text(message)
 
-    related_messages, answer_thread = parse_references(task_list, message.get("references", ""))
+    related_messages, answer_thread = parse_references(
+        task_list, message.get("references", "")
+    )
 
     # find the most relevant task to add a comment on.
     # among tasks in the selected task list, find the task having the
     # most email comments the current message references
     best_task = (
-        Task.objects.filter(task_list=task_list, comment__email_message_id__in=related_messages)
+        Task.objects.filter(
+            task_list=task_list, comment__email_message_id__in=related_messages
+        )
         .annotate(num_comments=Count("comment"))
         .order_by("-num_comments")
         .only("id")
@@ -139,13 +145,17 @@ def insert_message(task_list, message, priority, task_title_format):
             task=best_task,
             email_message_id=message_id,
             defaults={"email_from": message_from, "body": text},
-            author=match_user(message_from), # TODO: Write test for this
+            author=match_user(message_from),  # TODO: Write test for this
         )
         logger.info("created comment: %r", comment)
 
 
 def tracker_consumer(
-    producer, group=None, task_list_slug=None, priority=1, task_title_format="[MAIL] {subject}"
+    producer,
+    group=None,
+    task_list_slug=None,
+    priority=1,
+    task_title_format="[MAIL] {subject}",
 ):
     task_list = TaskList.objects.get(group__name=group, slug=task_list_slug)
     for message in producer:
@@ -157,7 +167,7 @@ def tracker_consumer(
 
 
 def match_user(email):
-    """ This function takes an email and checks for a registered user."""
+    """This function takes an email and checks for a registered user."""
 
     if not settings.TODO_MAIL_USER_MAPPER:
         user = None

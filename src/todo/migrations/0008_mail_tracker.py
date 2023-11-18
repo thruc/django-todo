@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("todo", "0007_auto_update_created_date")]
 
     operations = [

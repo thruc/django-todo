@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("auth", "0009_alter_user_last_name_max_length"),
         ("todo", "0003_assignee_optional"),
@@ -18,14 +17,19 @@ class Migration(migrations.Migration):
                 (
                     "id",
                     models.AutoField(
-                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
                     ),
                 ),
                 ("name", models.CharField(max_length=60)),
                 ("slug", models.SlugField(default="")),
                 (
                     "group",
-                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="auth.Group"),
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="auth.Group"
+                    ),
                 ),
             ],
             options={"verbose_name_plural": "Lists", "ordering": ["name"]},
@@ -38,8 +42,12 @@ class Migration(migrations.Migration):
             model_name="item",
             name="task_list",
             field=models.ForeignKey(
-                null=True, on_delete=django.db.models.deletion.CASCADE, to="todo.TaskList"
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="todo.TaskList",
             ),
         ),
-        migrations.AlterUniqueTogether(name="tasklist", unique_together={("group", "slug")}),
+        migrations.AlterUniqueTogether(
+            name="tasklist", unique_together={("group", "slug")}
+        ),
     ]

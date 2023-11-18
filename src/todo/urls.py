@@ -25,7 +25,9 @@ urlpatterns = [
     path("add_list/", views.add_list, name="add_list"),
     path("task/<int:task_id>/", views.task_detail, name="task_detail"),
     path(
-        "attachment/remove/<int:attachment_id>/", views.remove_attachment, name="remove_attachment"
+        "attachment/remove/<int:attachment_id>/",
+        views.remove_attachment,
+        name="remove_attachment",
     ),
 ]
 
@@ -35,7 +37,9 @@ if HAS_TASK_MERGE:
 
     urlpatterns.append(
         path(
-            "task/<int:task_id>/autocomplete/", TaskAutocomplete.as_view(), name="task_autocomplete"
+            "task/<int:task_id>/autocomplete/",
+            TaskAutocomplete.as_view(),
+            name="task_autocomplete",
         )
     )
 

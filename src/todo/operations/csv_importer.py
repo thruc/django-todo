@@ -66,7 +66,9 @@ class CSVImporter:
             if newrow:
                 # newrow at this point is fully validated, and all FK relations exist,
                 # e.g. `newrow.get("Assigned To")`, is a Django User instance.
-                assignee = newrow.get("Assigned To") if newrow.get("Assigned To") else None
+                assignee = (
+                    newrow.get("Assigned To") if newrow.get("Assigned To") else None
+                )
                 created_date = (
                     newrow.get("Created Date")
                     if newrow.get("Created Date")
@@ -99,7 +101,11 @@ class CSVImporter:
         self.summaries.append(f"Upserted {self.upsert_count} rows")
         self.summaries.append(f"Skipped {self.line_count - self.upsert_count} rows")
 
-        return {"summaries": self.summaries, "upserts": self.upserts, "errors": self.errors}
+        return {
+            "summaries": self.summaries,
+            "upserts": self.upserts,
+            "errors": self.errors,
+        }
 
     def validate_row(self, row):
         """Perform data integrity checks and set default values. Returns a valid object for insertion, or False.
@@ -115,7 +121,9 @@ class CSVImporter:
             msg = f"Missing required task creator."
             row_errors.append(msg)
 
-        creator = get_user_model().objects.filter(username=row.get("Created By")).first()
+        creator = (
+            get_user_model().objects.filter(username=row.get("Created By")).first()
+        )
         if not creator:
             msg = f"Invalid task creator {row.get('Created By')}"
             row_errors.append(msg)
@@ -155,7 +163,9 @@ class CSVImporter:
         # #######################
         # Task list must exist in the target group
         try:
-            tasklist = TaskList.objects.get(name=row.get("Task List"), group=target_group)
+            tasklist = TaskList.objects.get(
+                name=row.get("Task List"), group=target_group
+            )
             row["Task List"] = tasklist
         except TaskList.DoesNotExist:
             msg = f"Task list {row.get('Task List')} in group {target_group} does not exist"

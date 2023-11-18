@@ -13,9 +13,10 @@ from todo.utils import send_notify_mail, staff_check
 
 @login_required
 @user_passes_test(staff_check)
-def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> HttpResponse:
-    """Display and manage tasks in a todo list.
-    """
+def list_detail(
+    request, list_id=None, list_slug=None, view_completed=False
+) -> HttpResponse:
+    """Display and manage tasks in a todo list."""
 
     # Defaults
     task_list = None
@@ -28,7 +29,10 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
     else:
         # Show a specific list, ensuring permissions.
         task_list = get_object_or_404(TaskList, id=list_id)
-        if task_list.group not in request.user.groups.all() and not request.user.is_superuser:
+        if (
+            task_list.group not in request.user.groups.all()
+            and not request.user.is_superuser
+        ):
             raise PermissionDenied
         tasks = Task.objects.filter(task_list=task_list.id)
 
@@ -46,7 +50,11 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
         form = AddEditTaskForm(
             request.user,
             request.POST,
-            initial={"assigned_to": request.user.id, "priority": 999, "task_list": task_list},
+            initial={
+                "assigned_to": request.user.id,
+                "priority": 999,
+                "task_list": task_list,
+            },
         )
 
         if form.is_valid():
@@ -63,14 +71,20 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
             ):
                 send_notify_mail(new_task)
 
-            messages.success(request, 'New task "{t}" has been added.'.format(t=new_task.title))
+            messages.success(
+                request, 'New task "{t}" has been added.'.format(t=new_task.title)
+            )
             return redirect(request.path)
     else:
         # Don't allow adding new tasks on some views
         if list_slug not in ["mine", "recent-add", "recent-complete"]:
             form = AddEditTaskForm(
                 request.user,
-                initial={"assigned_to": request.user.id, "priority": 999, "task_list": task_list},
+                initial={
+                    "assigned_to": request.user.id,
+                    "priority": 999,
+                    "task_list": task_list,
+                },
             )
 
     context = {

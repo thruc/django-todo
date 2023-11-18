@@ -13,8 +13,7 @@ from todo.utils import staff_check
 @login_required
 @user_passes_test(staff_check)
 def add_list(request) -> HttpResponse:
-    """Allow users to add a new todo list to the group they're in.
-    """
+    """Allow users to add a new todo list to the group they're in."""
 
     # Only staffers can add lists, regardless of TODO_STAFF_USER setting.
     if not request.user.is_staff:
@@ -39,7 +38,9 @@ def add_list(request) -> HttpResponse:
     else:
         if request.user.groups.all().count() == 1:
             # FIXME: Assuming first of user's groups here; better to prompt for group
-            form = AddTaskListForm(request.user, initial={"group": request.user.groups.all()[0]})
+            form = AddTaskListForm(
+                request.user, initial={"group": request.user.groups.all()[0]}
+            )
         else:
             form = AddTaskListForm(request.user)
 

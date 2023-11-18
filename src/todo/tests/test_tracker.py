@@ -9,7 +9,10 @@ from email.message import EmailMessage
 
 def consumer(*args, title_format="[TEST] {subject}", **kwargs):
     return tracker_consumer(
-        group="Workgroup One", task_list_slug="zip", priority=1, task_title_format=title_format
+        group="Workgroup One",
+        task_list_slug="zip",
+        priority=1,
+        task_title_format=title_format,
     )(*args, **kwargs)
 
 
@@ -58,6 +61,7 @@ def test_tracker_task_creation(todo_setup, django_user_model):
     Comment.objects.get(
         task=task, body__contains="test3 content", email_message_id="<c@example.com>"
     )
+
 
 def test_tracker_email_match(todo_setup, django_user_model, settings):
     """

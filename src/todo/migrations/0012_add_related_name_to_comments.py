@@ -6,15 +6,20 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('todo', '0011_add_related_name_to_created_by'),
+        ("todo", "0011_add_related_name_to_created_by"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='comment',
-            name='author',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='todo_comments', to=settings.AUTH_USER_MODEL),
+            model_name="comment",
+            name="author",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="todo_comments",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

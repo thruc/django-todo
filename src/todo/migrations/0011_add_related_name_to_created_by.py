@@ -6,15 +6,20 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('todo', '0010_attachment'),
+        ("todo", "0010_attachment"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='task',
-            name='created_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='todo_created_by', to=settings.AUTH_USER_MODEL),
+            model_name="task",
+            name="created_by",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="todo_created_by",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

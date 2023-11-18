@@ -10,13 +10,11 @@ from todo.utils import staff_check
 @login_required
 @user_passes_test(staff_check)
 def search(request) -> HttpResponse:
-    """Search for tasks user has permission to see.
-    """
+    """Search for tasks user has permission to see."""
 
     query_string = ""
 
     if request.GET:
-
         found_tasks = None
         if ("q" in request.GET) and request.GET["q"].strip():
             query_string = request.GET["q"]

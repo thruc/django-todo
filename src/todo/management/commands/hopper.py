@@ -47,7 +47,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-
         if options.get("delete"):
             # Wipe out previous contents? Cascade deletes the Tasks from the TaskLists.
             TaskList.objects.all().delete()
@@ -94,7 +93,9 @@ class Command(BaseCommand):
         TaskListFactory.create(name="Public Tickets", slug="tickets", group=bw_group)
 
         print(
-            "For each of two groups, created fake tasks in each of {} fake lists.".format(num_lists)
+            "For each of two groups, created fake tasks in each of {} fake lists.".format(
+                num_lists
+            )
         )
 
 
@@ -132,7 +133,6 @@ class TaskFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def add_details(self, build, extracted, **kwargs):
-
         fake = Faker()  # Use to create user's names
         taskgroup = self.task_list.group
 

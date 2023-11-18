@@ -21,8 +21,7 @@ def test_send_notify_mail_not_me(todo_setup, django_user_model, email_backend_se
 
 
 def test_send_notify_mail_myself(todo_setup, django_user_model, email_backend_setup):
-    """Assign a task to myself, no mail should be sent.
-    """
+    """Assign a task to myself, no mail should be sent."""
 
     u1 = django_user_model.objects.get(username="u1")
     task = Task.objects.filter(created_by=u1).first()
@@ -32,7 +31,9 @@ def test_send_notify_mail_myself(todo_setup, django_user_model, email_backend_se
     assert len(mail.outbox) == 0
 
 
-def test_send_email_to_thread_participants(todo_setup, django_user_model, email_backend_setup):
+def test_send_email_to_thread_participants(
+    todo_setup, django_user_model, email_backend_setup
+):
     """For a given task authored by one user, add comments by two other users.
     Notification email should be sent to all three users."""
 

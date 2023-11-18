@@ -1,5 +1,6 @@
 from django.core.checks import Error, register
 
+
 # the sole purpose of this warning is to prevent people who have
 # django-autocomplete-light installed but not configured to start the app
 @register()

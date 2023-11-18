@@ -44,7 +44,9 @@ def external_add(request) -> HttpResponse:
             task.task_list = TaskList.objects.get(slug=settings.TODO_DEFAULT_LIST_SLUG)
             task.created_by = request.user
             if defaults("TODO_DEFAULT_ASSIGNEE"):
-                task.assigned_to = get_user_model().objects.get(username=settings.TODO_DEFAULT_ASSIGNEE)
+                task.assigned_to = get_user_model().objects.get(
+                    username=settings.TODO_DEFAULT_ASSIGNEE
+                )
             task.save()
 
             # Send email to assignee if we have one
@@ -65,11 +67,13 @@ def external_add(request) -> HttpResponse:
                     )
                 except ConnectionRefusedError:
                     messages.warning(
-                        request, "Task saved but mail not sent. Contact your administrator."
+                        request,
+                        "Task saved but mail not sent. Contact your administrator.",
                     )
 
             messages.success(
-                request, "Your trouble ticket has been submitted. We'll get back to you soon."
+                request,
+                "Your trouble ticket has been submitted. We'll get back to you soon.",
             )
             return redirect(defaults("TODO_PUBLIC_SUBMIT_REDIRECT"))
 

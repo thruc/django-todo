@@ -43,7 +43,9 @@ class AddEditTaskForm(ModelForm):
         }
         self.fields["task_list"].value = kwargs["initial"]["task_list"].id
 
-    due_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}), required=False)
+    due_date = forms.DateField(
+        widget=forms.DateInput(attrs={"type": "date"}), required=False
+    )
 
     title = forms.CharField(widget=forms.widgets.TextInput())
 
@@ -53,7 +55,8 @@ class AddEditTaskForm(ModelForm):
 
     def clean_created_by(self):
         """Keep the existing created_by regardless of anything coming from the submitted form.
-        If creating a new task, then created_by will be None, but we set it before saving."""
+        If creating a new task, then created_by will be None, but we set it before saving.
+        """
         return self.instance.created_by
 
     class Meta:
@@ -64,7 +67,9 @@ class AddEditTaskForm(ModelForm):
 class AddExternalTaskForm(ModelForm):
     """Form to allow users who are not part of the GTD system to file a ticket."""
 
-    title = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}), label="Summary")
+    title = forms.CharField(
+        widget=forms.widgets.TextInput(attrs={"size": 35}), label="Summary"
+    )
     note = forms.CharField(widget=forms.widgets.Textarea(), label="Problem Description")
     priority = forms.IntegerField(widget=forms.HiddenInput())
 

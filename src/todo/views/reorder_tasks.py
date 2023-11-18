@@ -10,8 +10,7 @@ from todo.utils import staff_check
 @login_required
 @user_passes_test(staff_check)
 def reorder_tasks(request) -> HttpResponse:
-    """Handle task re-ordering (priorities) from JQuery drag/drop in list_detail.html
-    """
+    """Handle task re-ordering (priorities) from JQuery drag/drop in list_detail.html"""
     newtasklist = request.POST.getlist("tasktable[]")
     if newtasklist:
         # First task in received list is always empty - remove it

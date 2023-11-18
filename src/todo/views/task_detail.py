@@ -31,7 +31,9 @@ def handle_add_comment(request, task):
         return
 
     Comment.objects.create(
-        author=request.user, task=task, body=bleach.clean(request.POST["comment-body"], strip=True)
+        author=request.user,
+        task=task,
+        body=bleach.clean(request.POST["comment-body"], strip=True),
     )
 
     send_email_to_thread_participants(
@@ -41,14 +43,15 @@ def handle_add_comment(request, task):
         subject='New comment posted on task "{}"'.format(task.title),
     )
 
-    messages.success(request, "Comment posted. Notification email sent to thread participants.")
+    messages.success(
+        request, "Comment posted. Notification email sent to thread participants."
+    )
 
 
 @login_required
 @user_passes_test(staff_check)
 def task_detail(request, task_id: int) -> HttpResponse:
-    """View task details. Allow task details to be edited. Process new comments on task.
-    """
+    """View task details. Allow task details to be edited. Process new comments on task."""
 
     task = get_object_or_404(Task, pk=task_id)
     comment_list = Comment.objects.filter(task=task_id).order_by("-date")
@@ -82,17 +85,24 @@ def task_detail(request, task_id: int) -> HttpResponse:
                 raise PermissionDenied
 
             task.merge_into(merge_target)
-            return redirect(reverse("todo:task_detail", kwargs={"task_id": merge_target.pk}))
+            return redirect(
+                reverse("todo:task_detail", kwargs={"task_id": merge_target.pk})
+            )
 
     # Save submitted comments
     handle_add_comment(request, task)
 
     # Save task edits
     if not request.POST.get("add_edit_task"):
-        form = AddEditTaskForm(request.user, instance=task, initial={"task_list": task.task_list})
+        form = AddEditTaskForm(
+            request.user, instance=task, initial={"task_list": task.task_list}
+        )
     else:
         form = AddEditTaskForm(
-            request.user, request.POST, instance=task, initial={"task_list": task.task_list}
+            request.user,
+            request.POST,
+            instance=task,
+            initial={"task_list": task.task_list},
         )
 
         if form.is_valid():
@@ -102,7 +112,9 @@ def task_detail(request, task_id: int) -> HttpResponse:
             item.save()
             messages.success(request, "The task has been edited.")
             return redirect(
-                "todo:list_detail", list_id=task.task_list.id, list_slug=task.task_list.slug
+                "todo:list_detail",
+                list_id=task.task_list.id,
+                list_slug=task.task_list.slug,
             )
 
     # Mark complete
@@ -129,11 +141,16 @@ def task_detail(request, task_id: int) -> HttpResponse:
         name, extension = os.path.splitext(file.name)
 
         if extension not in defaults("TODO_LIMIT_FILE_ATTACHMENTS"):
-            messages.error(request, f"This site does not allow upload of {extension} files.")
+            messages.error(
+                request, f"This site does not allow upload of {extension} files."
+            )
             return redirect("todo:task_detail", task_id=task.id)
 
         Attachment.objects.create(
-            task=task, added_by=request.user, timestamp=datetime.datetime.now(), file=file
+            task=task,
+            added_by=request.user,
+            timestamp=datetime.datetime.now(),
+            file=file,
         )
         messages.success(request, f"File attached successfully")
         return redirect("todo:task_detail", task_id=task.id)

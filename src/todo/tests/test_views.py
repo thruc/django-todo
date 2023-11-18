@@ -49,7 +49,8 @@ def test_view_mine(todo_setup, admin_client):
 def test_view_list_completed(todo_setup, admin_client):
     tlist = TaskList.objects.get(slug="zip")
     url = reverse(
-        "todo:list_detail_completed", kwargs={"list_id": tlist.id, "list_slug": tlist.slug}
+        "todo:list_detail_completed",
+        kwargs={"list_id": tlist.id, "list_slug": tlist.slug},
     )
     response = admin_client.get(url)
     assert response.status_code == 200
@@ -57,7 +58,9 @@ def test_view_list_completed(todo_setup, admin_client):
 
 def test_view_list(todo_setup, admin_client):
     tlist = TaskList.objects.get(slug="zip")
-    url = reverse("todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
+    url = reverse(
+        "todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug}
+    )
     response = admin_client.get(url)
     assert response.status_code == 200
 
@@ -122,20 +125,24 @@ def test_no_javascript_in_task_note(todo_setup, client):
     }
 
     client.login(username="u2", password="password")
-    url = reverse("todo:list_detail", kwargs={"list_id": task_list.id, "list_slug": task_list.slug})
+    url = reverse(
+        "todo:list_detail",
+        kwargs={"list_id": task_list.id, "list_slug": task_list.slug},
+    )
 
     response = client.post(url, data)
     assert response.status_code == 302
 
     # Retrieve new task and compare notes field
     task = Task.objects.get(title=title)
-    assert task.note != note  # Should have been modified by bleach since note included javascript!
+    assert (
+        task.note != note
+    )  # Should have been modified by bleach since note included javascript!
     assert task.note == bleach.clean(note, strip=True)
 
 
 @pytest.mark.django_db
 def test_created_by_unchanged(todo_setup, client):
-
     task_list = TaskList.objects.first()
     u2 = get_user_model().objects.get(username="u2")
     title = "Some Unique String with unique chars: ab78539e"
@@ -151,7 +158,8 @@ def test_created_by_unchanged(todo_setup, client):
 
     client.login(username="u2", password="password")
     url_add_task = reverse(
-        "todo:list_detail", kwargs={"list_id": task_list.id, "list_slug": task_list.slug}
+        "todo:list_detail",
+        kwargs={"list_id": task_list.id, "list_slug": task_list.slug},
     )
 
     response = client.post(url_add_task, data)
@@ -258,7 +266,9 @@ def test_view_add_list_nonadmin(todo_setup, client):
 
 def test_view_del_list_nonadmin(todo_setup, client):
     tlist = TaskList.objects.get(slug="zip")
-    url = reverse("todo:del_list", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
+    url = reverse(
+        "todo:del_list", kwargs={"list_id": tlist.id, "list_slug": tlist.slug}
+    )
     client.login(username="you", password="password")
     response = client.get(url)
     assert response.status_code == 302  # Fedirected to login
@@ -266,26 +276,32 @@ def test_view_del_list_nonadmin(todo_setup, client):
 
 def test_del_list_not_in_list_group(todo_setup, admin_client):
     tlist = TaskList.objects.get(slug="zip")
-    url = reverse("todo:del_list", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
+    url = reverse(
+        "todo:del_list", kwargs={"list_id": tlist.id, "list_slug": tlist.slug}
+    )
     response = admin_client.get(url)
     assert response.status_code == 403
 
 
 def test_view_list_mine(todo_setup, client):
-    """View a list in a group I belong to.
-    """
+    """View a list in a group I belong to."""
     tlist = TaskList.objects.get(slug="zip")  # User u1 is in this group's list
-    url = reverse("todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
+    url = reverse(
+        "todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug}
+    )
     client.login(username="u1", password="password")
     response = client.get(url)
     assert response.status_code == 200
 
 
 def test_view_list_not_mine(todo_setup, client):
-    """View a list in a group I don't belong to.
-    """
-    tlist = TaskList.objects.get(slug="zip")  # User u1 is in this group, user u2 is not.
-    url = reverse("todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
+    """View a list in a group I don't belong to."""
+    tlist = TaskList.objects.get(
+        slug="zip"
+    )  # User u1 is in this group, user u2 is not.
+    url = reverse(
+        "todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug}
+    )
     client.login(username="u2", password="password")
     response = client.get(url)
     assert response.status_code == 403
