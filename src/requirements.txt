@@ -1,1 +1,14 @@
+asgiref==3.7.2
+bleach==5.0.1
 Django==4.2.7
+django-autocomplete-light==3.9.7
+django-bleach==3.1.0
+factory-boy==3.3.0
+Faker==20.0.3
+html2text==2020.1.16
+python-dateutil==2.8.2
+six==1.16.0
+sqlparse==0.4.4
+tinycss2==1.1.1
+titlecase==2.4.1
+webencodings==0.5.1
